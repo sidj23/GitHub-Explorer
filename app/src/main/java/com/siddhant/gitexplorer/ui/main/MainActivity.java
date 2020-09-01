@@ -1,5 +1,6 @@
 package com.siddhant.gitexplorer.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -53,6 +54,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityListe
 
     @Override
     public void onItemClick(Repository repository) {
-        this.startActivity(RepositoryDetailsActivity.newIntent(repository));
+        startActivity(RepositoryDetailsActivity.newIntent(this,repository));
     }
 }

@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Repository implements Parcelable {
+public class Repository implements Parcelable{
 
     @SerializedName("id")
     @Expose
@@ -158,6 +158,7 @@ public class Repository implements Parcelable {
         fullName = in.readString();
         byte tmp_private = in.readByte();
         _private = tmp_private == 0 ? null : tmp_private == 1;
+        owner = in.readParcelable(Owner.class.getClassLoader());
         htmlUrl = in.readString();
         description = in.readString();
         byte tmpFork = in.readByte();
@@ -598,6 +599,7 @@ public class Repository implements Parcelable {
         parcel.writeString(name);
         parcel.writeString(fullName);
         parcel.writeByte((byte) (_private == null ? 0 : _private ? 1 : 2));
+        parcel.writeParcelable(owner, i);
         parcel.writeString(htmlUrl);
         parcel.writeString(description);
         parcel.writeByte((byte) (fork == null ? 0 : fork ? 1 : 2));

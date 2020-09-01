@@ -9,9 +9,10 @@
 
         <variable
             name="viewModel"
-            type="com.siddhant.gitexplorer.ui.repodetails.RepositoryDetailsViewModel" />
+            type="com.siddhant.gitexplorer.ui.contributorrepo.ContributorRepositoryViewModel" />
 
     </data>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,68 +22,30 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
             android:background="@color/colorWhite"
-            android:orientation="horizontal"
-            android:weightSum="5">
+            android:gravity="center"
+            android:orientation="vertical">
 
             <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_margin="8dp"
-                android:layout_weight="3"
                 android:scaleType="fitXY"
                 app:fitGridImageUrl="@{viewModel.imageProfile}" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:orientation="vertical">
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{viewModel.textName}"
-                    android:textColor="@color/colorBlack" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="@{viewModel.textFullName}"
-                    android:textColor="@color/colorBlack" />
-
-            </LinearLayout>
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:background="@color/colorWhite"
-            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:text="Description:"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:lines="2"
+                android:text="@{viewModel.textName}"
                 android:textColor="@color/colorBlack"
-                android:textSize="16sp"
+                android:textSize="12sp"
                 android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:text="@{viewModel.textDescription}"
-                android:textColor="@color/colorBlack" />
-
 
         </LinearLayout>
 
@@ -102,16 +65,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:text="Contributors:"
+                    android:text="Repositories:"
                     android:textColor="@color/colorBlack"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/ard_contri_rv"
+                    android:id="@+id/acr_repo_rv"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    tools:listitem="@layout/item_contributor"/>
+                    tools:listitem="@layout/item_repository" />
             </LinearLayout>
 
             <ProgressBar
@@ -122,7 +85,7 @@
 
         </RelativeLayout>
 
-    </LinearLayout>
 
+    </LinearLayout>
 
 </layout>

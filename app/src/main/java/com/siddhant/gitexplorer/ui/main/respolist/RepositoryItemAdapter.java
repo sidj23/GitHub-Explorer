@@ -24,11 +24,6 @@ public class RepositoryItemAdapter extends RecyclerView.Adapter<BaseViewHolder> 
         this.listener = listener;
     }
 
-    public void setList(List<Repository> repositoryList) {
-        this.repositoryList.clear();
-        this.repositoryList.addAll(repositoryList);
-    }
-
     @NonNull
     @Override
     public BaseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

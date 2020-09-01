@@ -1,9 +1,11 @@
-package com.siddhant.gitexplorer.ui.main;
+package com.siddhant.gitexplorer.ui.contributorrepo;
 
 import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
 import androidx.lifecycle.ViewModel;
 
 import com.siddhant.gitexplorer.api.ApiUtils;
+import com.siddhant.gitexplorer.model.Owner;
 import com.siddhant.gitexplorer.model.Repository;
 
 import java.util.ArrayList;
@@ -13,29 +15,35 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivityViewModel extends ViewModel {
+public class ContributorRepositoryViewModel extends ViewModel {
 
+    public final ObservableField<String> textName;
+    public final ObservableField<String> imageProfile;
     public final ObservableBoolean isDataAvailable;
+    ContributorRepositoryActivityListener listener;
     private List<Repository> repositoryList = new ArrayList<>();
-    private MainActivityListener listener;
 
-    public MainActivityViewModel(MainActivityListener listener) {
+    public ContributorRepositoryViewModel(ContributorRepositoryActivityListener listener) {
         this.listener = listener;
+        textName = new ObservableField<>("");
+        imageProfile = new ObservableField<>("");
         isDataAvailable = new ObservableBoolean(false);
+
     }
 
-    public void initApiForRepository() {
+    public void initApiForRepository(Owner owner) {
+        if (owner != null) {
+            textName.set(owner.getLogin());
+            imageProfile.set(owner.getAvatarUrl());
+        }
 
-        ApiUtils.getApiCalls().popularRepositories().enqueue(new Callback<List<Repository>>() {
+        ApiUtils.getApiCalls().contributorsRepo(owner.getLogin()).enqueue(new Callback<List<Repository>>() {
             @Override
             public void onResponse(Call<List<Repository>> call, Response<List<Repository>> response) {
                 if (response.isSuccessful()) {
-                    isDataAvailable.set(true);
                     repositoryList = response.body();
-                    if (repositoryList.size() < 20)
-                        listener.setRepositoryList(repositoryList);
-                    else
-                        listener.setRepositoryList(repositoryList.subList(0, 20));
+                    listener.setRepositoryList(repositoryList);
+                    isDataAvailable.set(true);
                 } else {
                     isDataAvailable.set(false);
                 }
@@ -46,8 +54,5 @@ public class MainActivityViewModel extends ViewModel {
                 isDataAvailable.set(false);
             }
         });
-        // }
     }
-
-
 }

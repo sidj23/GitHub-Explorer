@@ -1,18 +1,25 @@
 package com.siddhant.gitexplorer.ui.repodetails;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.siddhant.gitexplorer.R;
 import com.siddhant.gitexplorer.databinding.ActivityRepositoryDetailsBinding;
+import com.siddhant.gitexplorer.model.Owner;
 import com.siddhant.gitexplorer.model.Repository;
+import com.siddhant.gitexplorer.ui.contributorrepo.ContributorRepositoryActivity;
+import com.siddhant.gitexplorer.ui.repodetails.contributorlist.ContributorItemAdapter;
 
-public class RepositoryDetailsActivity extends AppCompatActivity {
+import java.util.List;
+
+public class RepositoryDetailsActivity extends AppCompatActivity implements RepositoryDetailsActivityListener, ContributorItemAdapter.ContributorItemAdapterListener {
 
     private static final String ARGS_PARAM_1 = "ARGS_PARAM_1";
 
@@ -22,24 +29,29 @@ public class RepositoryDetailsActivity extends AppCompatActivity {
 
     private Repository repository;
 
-    public static Intent newIntent(Repository repository) {
-        Intent intent = new Intent();
+    private ContributorItemAdapter contributorItemAdapter;
+
+    public static Intent newIntent(Context context, Repository repository) {
+        Intent intent = new Intent(context, RepositoryDetailsActivity.class);
         Bundle args = new Bundle();
         args.putParcelable(ARGS_PARAM_1, repository);
+        intent.putExtra("bundle", args);
         return intent;
     }
 
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
-        repositoryDetailsViewModel = new RepositoryDetailsViewModel();
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        repositoryDetailsViewModel = new RepositoryDetailsViewModel(this);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_repository_details);
         binding.setLifecycleOwner(this);
         binding.setViewModel(repositoryDetailsViewModel);
 
-        this.repository = savedInstanceState.getParcelable(ARGS_PARAM_1);
+        Bundle args = getIntent().getBundleExtra("bundle");
+
+        this.repository = args.getParcelable(ARGS_PARAM_1);
 
         repositoryDetailsViewModel.initApiForContributors(repository);
 
@@ -48,6 +60,20 @@ public class RepositoryDetailsActivity extends AppCompatActivity {
     }
 
     private void setUpView() {
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
+        gridLayoutManager.setOrientation(RecyclerView.VERTICAL);
+        binding.ardContriRv.setLayoutManager(gridLayoutManager);
+    }
 
+    @Override
+    public void setOwnerList(List<Owner> ownerList) {
+        contributorItemAdapter = new ContributorItemAdapter(ownerList, this);
+        binding.ardContriRv.setAdapter(contributorItemAdapter);
+        contributorItemAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onItemClick(Owner owner) {
+        startActivity(ContributorRepositoryActivity.newIntent(this, owner));
     }
 }
