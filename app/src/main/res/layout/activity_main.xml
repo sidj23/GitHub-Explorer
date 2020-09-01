@@ -20,7 +20,14 @@
             android:id="@+id/am_repository_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="@{viewModel.isDataAvailable ? View.VISIBLE:View.GONE}"
             tools:listitem="@layout/item_repository" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="@{viewModel.isDataAvailable ? View.GONE:View.VISIBLE}" />
 
     </RelativeLayout>
 
